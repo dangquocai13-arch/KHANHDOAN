@@ -1,4 +1,4 @@
-# 🎂 Happy Birthday Bé Đon 🎂
+# 🎂 Happy Birthday Bé ĐON 🎂
 
 Trang web chúc mừng sinh nhật đặc biệt dành cho Bé Đon 💖.  
 Bao gồm hiệu ứng tim rơi, pháo hoa, ảnh kỷ niệm và nhạc nền **Chúc mừng sinh nhật – Phan Đinh Tùng** 🎶.
@@ -10,4 +10,4 @@ Bao gồm hiệu ứng tim rơi, pháo hoa, ảnh kỷ niệm và nhạc nền *
 
 ---
 
-💌 Tặng Bé Đon một ngày sinh nhật thật đặc biệt!
+💌 Tặng Bé ĐON một ngày sinh nhật thật đặc biệt!
