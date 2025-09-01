@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday Bé Đon</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #ff9a9e, #fad0c4);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      text-align: center;
+      overflow: hidden;
+    }
+    #intro {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff9a9e, #fecfef);
+    }
+    #intro button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 12px;
+      background: #ff4e50;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+    #intro button:hover { transform: scale(1.1); }
+
+    #mainContent { display: none; }
+
+    h1 {
+      font-size: 3em;
+      margin-top: 20px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    }
+    p { font-size: 1.5em; }
+
+    /* Tim rơi */
+    .heart {
+      position: fixed;
+      top: -10vh;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(-45deg);
+      animation: fall 6s linear forwards, beat 1s infinite;
+      opacity: 0.9;
+    }
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: 10px; top: 0; }
+
+    @keyframes fall {
+      0% { transform: translate(0,0) rotate(-45deg) scale(1); opacity: 1; }
+      100% { transform: translate(var(--x-move, 0px), 110vh) rotate(-45deg) scale(1); opacity: 0; }
+    }
+    @keyframes beat {
+      0%, 100% { transform: rotate(-45deg) scale(1); }
+      50% { transform: rotate(-45deg) scale(1.3); }
+    }
+
+    /* Ảnh mini */
+    .mini-photo {
+      position: fixed;
+      top: -10vh;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      animation: fall 7s linear forwards;
+      box-shadow: 0 0 8px pink;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    /* Ảnh chính nhịp tim */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Trang intro -->
+  <div id="intro">
+    <h1>💌 Bé Đon ơi 💌</h1>
+    <p>Anh có một bất ngờ nhỏ dành cho em...</p>
+    <button onclick="showSurprise()">Click để mở bất ngờ 🎁</button>
+  </div>
+
+  <!-- Nội dung chúc mừng -->
+  <div id="mainContent">
+    <h1>🎉 Chúc mừng sinh nhật Bé Đon 🎂</h1>
+    <p>Chúc em tuổi mới luôn xinh đẹp, hạnh phúc và tràn đầy yêu thương 💖</p>
+    <p>Em sẽ luôn là một phần của cuộc sống anh, vì vậy anh sẽ luôn bên em mỗi khi em cần,
+       luôn yêu thương và chiều chuộng em ạ 💖</p>
+    <p>Chúc em sẽ luôn thành công hơn trong công việc, cuộc sống, luôn tươi vui
+       và toả nắng như một bông hoa nhé 💖</p>
+    <p>Ngày đặc biệt của em: <b>02/09/2004</b></p>
+    <p>Anh Iu Bé Đon ạ 💖</p>
+
+    <!-- Ảnh kỷ niệm -->
+    <img src="z6967435559196_f57cc02c15f3dde321ef37b3ff19827d.jpg" 
+         alt="Ảnh kỷ niệm" 
+         style="max-width: 350px; border-radius: 20px; margin: 20px auto; display: block; 
+                box-shadow: 0 0 20px pink; animation: pulse 2s infinite;">
+
+    <!-- Nhạc nền (file mp3 trong thư mục) -->
+    <audio id="bg-music" autoplay loop hidden>
+      <source src="nhac.mp3" type="audio/mpeg">
+    </audio>
+
+    <canvas id="fireworks"></canvas>
+  </div>
+
+  <script>
+    function showSurprise() {
+      document.getElementById('intro').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+      document.getElementById('bg-music').play(); // phát nhạc nền
+    }
+
+    // Danh sách ảnh mini
+    const photoList = [
+      "z6967435559196_f57cc02c15f3dde321ef37b3ff19827d.jpg",
+      "a1.jpg","a2.jpg","a3.jpg","a4.jpg","a5.jpg","a6.jpg",
+      "a7.jpg","a8.jpg","a9.jpg","a10.jpg"
+    ];
+
+    // Tạo tim hoặc ảnh mini rơi
+    function createHeartOrPhoto() {
+      if (Math.random() < 0.5) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+        heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+        heart.style.setProperty("--x-move", (Math.random() * 200 - 100) + "px");
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      } else {
+        const photo = document.createElement("img");
+        photo.src = photoList[Math.floor(Math.random() * photoList.length)];
+        photo.className = "mini-photo";
+        photo.style.left = Math.random() * 100 + "vw";
+        photo.style.animationDuration = (4 + Math.random() * 3) + "s";
+        photo.style.setProperty("--x-move", (Math.random() * 200 - 100) + "px");
+        document.body.appendChild(photo);
+        setTimeout(() => photo.remove(), 7000);
+      }
+    }
+
+    // Hiệu ứng pháo hoa
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    function random(min, max) { return Math.random() * (max - min) + min; }
+
+    class Firework {
+      constructor() {
+        this.x = random(0, canvas.width);
+        this.y = canvas.height;
+        this.color = `hsl(${random(0,360)},100%,50%)`;
+        this.particles = [];
+        for (let i = 0; i < 50; i++) {
+          this.particles.push({
+            x: this.x,
+            y: this.y,
+            angle: random(0, 2*Math.PI),
+            speed: random(2,5),
+            alpha: 1
+          });
+        }
+      }
+      draw() {
+        this.particles.forEach(p => {
+          ctx.fillStyle = this.color;
+          ctx.globalAlpha = p.alpha;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 2, 0, Math.PI*2);
+          ctx.fill();
+        });
+      }
+      update() {
+        this.particles.forEach(p => {
+          p.x += Math.cos(p.angle) * p.speed;
+          p.y += Math.sin(p.angle) * p.speed;
+          p.alpha -= 0.01;
+        });
+      }
+    }
+
+    let fireworks = [];
+    function animate() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      if (Math.random() < 0.05) fireworks.push(new Firework());
+      fireworks.forEach((f,i) => {
+        f.update();
+        f.draw();
+        f.particles = f.particles.filter(p => p.alpha > 0);
+        if (f.particles.length === 0) fireworks.splice(i,1);
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Tim + ảnh mini rơi khi mở bất ngờ
+    setInterval(() => {
+      if (document.getElementById('mainContent').style.display === 'block') {
+        createHeartOrPhoto();
+      }
+    }, 400);
+  </script>
+</body>
+</html>
